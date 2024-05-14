@@ -1,5 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getSession } from 'auth-astro/server';
+
+
+const session = await getSession(Astro.request);
 ---
 
 <Layout title="Welcome to Astro.">
@@ -40,7 +44,23 @@ import Layout from '../layouts/Layout.astro';
 		<ul role="list" class="link-card-grid">
 
 		</ul>
+		<button id="login">Login</button>
+  <button id="logout">Logout</button>
 	</main>
+	
+
+  <script>
+    const { signIn, signOut } = await import("auth-astro/client")
+		const login = document.querySelector("#login") as HTMLButtonElement
+		if (login) {
+			login.onclick = () => signIn("github")
+		}
+    
+		const logout = document.querySelector("#logout") as HTMLButtonElement
+		if (logout) { 
+			logout.onclick = () => signOut()
+		}
+  </script>
 </Layout>
 
 <style>
