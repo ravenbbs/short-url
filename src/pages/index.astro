@@ -44,6 +44,13 @@ const session = await getSession(Astro.request);
 		<ul role="list" class="link-card-grid">
 
 		</ul>
+		{
+			session ? (
+				<p>Welcome {session.user?.name}</p>
+			) : (
+				<p>Not logged in</p>
+			)
+		}
 		<button id="login">Login</button>
   <button id="logout">Logout</button>
 	</main>
