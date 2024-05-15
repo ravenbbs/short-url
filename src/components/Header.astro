@@ -1,8 +1,8 @@
 ---
 import { getSession } from 'auth-astro/server';
+import './style.css';
 
 const session = await getSession(Astro.request);
-
 ---
 
 <header>
@@ -10,12 +10,13 @@ const session = await getSession(Astro.request);
     session ? (
       <p>Hola {session.user?.name}</p>
       <img src={session.user?.image}/>
+      <button class="button" id="logout">Logout</button>
     ) : (
       <p>Sin session iniciada</p>
+      <button class="button" id="login">Login</button>
     )
   }
-  <button id="login">Login</button>
-<button id="logout">Logout</button>
+
 </header>
 
 <script>
@@ -33,6 +34,7 @@ const session = await getSession(Astro.request);
 
 <style>
 	header {
+    background-color: white;
 		margin: auto;
 		padding: 1rem;
 		width: 800px;
@@ -41,4 +43,12 @@ const session = await getSession(Astro.request);
 		font-size: 20px;
 		line-height: 1.6;
 	}
+  /* .button {
+    background-color: white;
+    color: black;
+    border-radius:12px;
+    padding: 0.5em;
+    outline:none;
+    border: black solid 2px;
+  } */
 </style>
