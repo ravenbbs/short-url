@@ -4,6 +4,8 @@ import { getSession } from 'auth-astro/server';
 
 
 const session = await getSession(Astro.request);
+
+console.log(session)
 ---
 
 <Layout title="Welcome to Astro.">
@@ -46,9 +48,10 @@ const session = await getSession(Astro.request);
 		</ul>
 		{
 			session ? (
-				<p>Welcome {session.user?.name}</p>
+				<p>Hola {session.user?.name}</p>
+				<img src={session.user?.image}/>
 			) : (
-				<p>Not logged in</p>
+				<p>Sin session iniciada</p>
 			)
 		}
 		<button id="login">Login</button>
@@ -60,7 +63,7 @@ const session = await getSession(Astro.request);
     const { signIn, signOut } = await import("auth-astro/client")
 		const login = document.querySelector("#login") as HTMLButtonElement
 		if (login) {
-			login.onclick = () => signIn("github")
+			login.onclick = () => signIn("google")
 		}
     
 		const logout = document.querySelector("#logout") as HTMLButtonElement
