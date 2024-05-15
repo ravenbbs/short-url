@@ -5,14 +5,13 @@ const User = defineTable({
     id: column.number({ primaryKey: true }),
     email: column.text(), 
     name: column.text(), 
-    image: column.text( )
+    image: column.text()
   }
 })
 
 const Link = defineTable({
   columns: {
     userId: column.number({ references: () => User.columns.id }),
-
     url: column.text(), 
     code: column.text()
   }

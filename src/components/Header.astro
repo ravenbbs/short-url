@@ -1,48 +1,76 @@
 ---
-import { getSession } from 'auth-astro/server';
-import { Button } from "@/components/ui/button"
+import { getSession } from "auth-astro/server";
+import { Button } from "@/components/ui/button";
+import { db } from "astro:db";
+import { User } from "astro:db";
+import { like } from "astro:db";
 const session = await getSession(Astro.request);
+console.log(session);
+//Verificar si el usuario existe
+if (session && 
+  session.user?.email && 
+  session.user?.name && 
+  session.user?.image) {
+
+  const res = await db
+  .select()
+  .from(User)
+  .where(like(User.email, session.user?.email));
+
+  if (res.length === 0) {
+    await db.insert(User).values({
+      email: session.user?.email,
+      name: session.user?.name,
+      image: session.user?.image,
+    });
+  }
+}
 ---
 
 <header>
   {
     session ? (
-      <p class="font-bold">Hola {session.user?.name}</p>
-      <img src={session.user?.image}/>
-
-      <Button className="font-bold " id="logout">Logout</Button>
+      <>
+        <p class="font-bold">Hola {session.user?.name}</p>
+        <img src={session.user?.image} />
+        <Button className="font-bold " id="logout">
+          Logout
+        </Button>
+      </>
     ) : (
-      <p>Sin session iniciada</p>
-      <Button id="login">Login</Button>
+      <>
+        <p>Sin session iniciada</p>
+        <Button id="login">Login</Button>
+      </>
     )
   }
 </header>
 
 <script>
-  const { signIn, signOut } = await import("auth-astro/client")
-  const login = document.querySelector("#login") as HTMLButtonElement
+  const { signIn, signOut } = await import("auth-astro/client");
+  const login = document.querySelector("#login") as HTMLButtonElement;
   if (login) {
-    login.onclick = () => signIn("google")
+    login.onclick = () => signIn("google");
   }
-  
-  const logout = document.querySelector("#logout") as HTMLButtonElement
-  if (logout) { 
-    logout.onclick = () => signOut()
+
+  const logout = document.querySelector("#logout") as HTMLButtonElement;
+  if (logout) {
+    logout.onclick = () => signOut();
   }
 </script>
 
 <style>
-	header {
+  header {
     background-color: rgb(0, 0, 0);
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		color: white;
-		font-size: 20px;
-		line-height: 1.6;
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
     font-weight: 600;
-	}
+  }
   /* .button {
     background-color: white;
     color: black;
