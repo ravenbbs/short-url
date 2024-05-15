@@ -1,0 +1,44 @@
+---
+import { getSession } from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+
+---
+
+<header>
+  {
+    session ? (
+      <p>Hola {session.user?.name}</p>
+      <img src={session.user?.image}/>
+    ) : (
+      <p>Sin session iniciada</p>
+    )
+  }
+  <button id="login">Login</button>
+<button id="logout">Logout</button>
+</header>
+
+<script>
+  const { signIn, signOut } = await import("auth-astro/client")
+  const login = document.querySelector("#login") as HTMLButtonElement
+  if (login) {
+    login.onclick = () => signIn("google")
+  }
+  
+  const logout = document.querySelector("#logout") as HTMLButtonElement
+  if (logout) { 
+    logout.onclick = () => signOut()
+  }
+</script>
+
+<style>
+	header {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		color: white;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+</style>
