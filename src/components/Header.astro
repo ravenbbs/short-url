@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { db } from "astro:db";
 import { User } from "astro:db";
 import { like } from "astro:db";
+
 const session = await getSession(Astro.request);
-console.log(session);
 //Verificar si el usuario existe
 if (session && 
   session.user?.email && 
@@ -27,20 +27,23 @@ if (session &&
 }
 ---
 
-<header>
+<header class="flex justify-between bg-gray-600 p-6">
+  <section> 
+    <h1 class="font-bold text-sm">shortly</h1>
+    <img class="w-12 h-12" src="./logo.svg" />
+  </section>
   {
     session ? (
-      <>
+      <section class="flex justify-between">
         <p class="font-bold">Hola {session.user?.name}</p>
         <img src={session.user?.image} />
-        <Button className="font-bold " id="logout">
+        <Button className="font-bold" id="logout">
           Logout
         </Button>
-      </>
+      </section>
     ) : (
       <>
-        <p>Sin session iniciada</p>
-        <Button id="login">Login</Button>
+        <Button className="font-bold" id="login">Login</Button>
       </>
     )
   }
@@ -58,25 +61,3 @@ if (session &&
     logout.onclick = () => signOut();
   }
 </script>
-
-<style>
-  header {
-    background-color: rgb(0, 0, 0);
-    margin: auto;
-    padding: 1rem;
-    width: 800px;
-    max-width: calc(100% - 2rem);
-    color: white;
-    font-size: 20px;
-    line-height: 1.6;
-    font-weight: 600;
-  }
-  /* .button {
-    background-color: white;
-    color: black;
-    border-radius:12px;
-    padding: 0.5em;
-    outline:none;
-    border: black solid 2px;
-  } */
-</style>
