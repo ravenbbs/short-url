@@ -11,7 +11,7 @@ const User = defineTable({
 
 const Link = defineTable({
   columns: {
-    userId: column.number({ references: () => User.columns.id }),
+    userId: column.number({ optional:true, references: () => User.columns.id }),
     url: column.text(), 
     code: column.text()
   }
