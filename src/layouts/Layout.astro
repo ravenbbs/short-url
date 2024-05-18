@@ -1,8 +1,7 @@
 ---
-import { Toaster } from "@/components/ui/toaster";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { ToastProvider } from "@radix-ui/react-toast";
+import { Toaster } from 'react-hot-toast';
 
 interface Props {
   title: string;
@@ -29,7 +28,6 @@ const { title } = Astro.props;
     </main>
     <Footer />
 
-    <ToastProvider />
     <Toaster client:idle />
   </body>
 </html>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { db } from "astro:db";
 import { User } from "astro:db";
 import { like } from "astro:db";
+import { getUserByEmail } from "@/pages/utils/db";
 
 const session = await getSession(Astro.request);
 //Verificar si el usuario existe
@@ -12,12 +13,12 @@ if (session &&
   session.user?.name && 
   session.user?.image) {
 
-  const res = await db
-  .select()
-  .from(User)
-  .where(like(User.email, session.user?.email));
-
-  if (res.length === 0) {
+    const res = await getUserByEmail(session.user.email)
+  
+if (
+    res.success &&
+    !res.data
+  )  {
     await db.insert(User).values({
       email: session.user?.email,
       name: session.user?.name,
