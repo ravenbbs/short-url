@@ -2,13 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import InputForm  from "@/components/FormUrl";
-import { getSession } from "auth-astro/server";
-
-const session = await getSession(Astro.request);
 
 ---
 
 <Layout title="shortly - acortador de urls">
-
+  
   <InputForm client:load />
+
 </Layout>

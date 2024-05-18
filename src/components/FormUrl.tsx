@@ -3,6 +3,9 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { CircleX } from "lucide-react";
 
+import { toast } from "@/components/ui/use-toast"
+
+
 function validarURL(url: string): boolean {
   // Expresión regular para validar una URL
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+\.[a-zA-Z]{2,}(\/\S*)?$/
@@ -41,7 +44,6 @@ export default function InputForm({userId}: {userId?: number}) {
       })
     })
     const body = await res.json()
-    console.log(body.link)
     const Link = body.Link
     
     if(!Link) {
@@ -56,6 +58,10 @@ export default function InputForm({userId}: {userId?: number}) {
       setError("Error al acortar la URL, intenta mas tarde.")
     }
     
+  }
+
+  const handleCopy = () => {
+    window.navigator.clipboard.writeText(shortUrlRef.current!.value)
   }
 
   return (
@@ -88,9 +94,21 @@ export default function InputForm({userId}: {userId?: number}) {
         className="outline-none border-none bg-gray-300 "
         type="text" />      
       <Button
+        onClick={handleCopy}
         className="w-full ">
         Copiar URL
       </Button>
+      <Button
+      type="button"
+  onClick={() => {
+    toast({
+      title: "Scheduled: Catch up",
+      description: "Friday, February 10, 2023 at 5:57 PM",
+    })
+  }}
+>
+  Show Toast
+</Button>
     </form>
   )
 }
