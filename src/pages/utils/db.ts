@@ -26,3 +26,28 @@ export const getUserByEmail = async (email:string) => {
   }
 }
 
+export const getLinkUrl = async (code: string) => {
+  try {
+    const res = await db.select().from(Link).where(
+      like(Link.code, code)
+    )
+
+    if (res.length === 0) {
+      return {
+        success: true,
+        data: null
+      }
+    }
+
+    return {
+      success: true,
+      data: res[0].url
+    }
+  } catch (e) {
+    const error = e as Error
+    return {
+      success: false,
+      error: error.message
+    }
+  } 
+}
