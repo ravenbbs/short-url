@@ -3,7 +3,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { CircleX } from "lucide-react";
 
-import { toast } from "@/components/ui/use-toast"
+import toast from 'react-hot-toast';
+
 
 
 function validarURL(url: string): boolean {
@@ -23,7 +24,7 @@ export default function InputForm({userId}: {userId?: number}) {
     e.preventDefault()
 
     if (!url) {
-      setError('Debes escribir una URL')
+      toast.error("Debes escribir una URL")
       return
     }
 
@@ -61,7 +62,13 @@ export default function InputForm({userId}: {userId?: number}) {
   }
 
   const handleCopy = () => {
-    window.navigator.clipboard.writeText(shortUrlRef.current!.value)
+    try {
+      window.navigator.clipboard.writeText(shortUrlRef.current!.value)
+      toast.success('URL copiada con éxito.')
+
+    } catch (e){
+      toast.error("No se pudo copiar la URL")
+    }
   }
 
   return (
@@ -85,6 +92,7 @@ export default function InputForm({userId}: {userId?: number}) {
         onChange={(e) => setUrl(e.target.value)}
         />
       <Button
+        type="submit"
         className="w-full ">
         Acortar URL
       </Button>
@@ -94,21 +102,12 @@ export default function InputForm({userId}: {userId?: number}) {
         className="outline-none border-none bg-gray-300 "
         type="text" />      
       <Button
+        type="button"
         onClick={handleCopy}
         className="w-full ">
         Copiar URL
       </Button>
-      <Button
-      type="button"
-  onClick={() => {
-    toast({
-      title: "Scheduled: Catch up",
-      description: "Friday, February 10, 2023 at 5:57 PM",
-    })
-  }}
->
-  Show Toast
-</Button>
     </form>
+    
   )
 }
