@@ -2,11 +2,30 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import InputForm  from "@/components/FormUrl";
+import { getSession } from "auth-astro/server";
+import { getUserByEmail } from "./utils/db";
+
+const session = await getSession(Astro.request)
+
+let userId: number | undefined
+if (
+  session &&
+  session.user?.email
+) {
+  const res = await getUserByEmail(session.user.email)
+
+  if (
+    res.success &&
+    res.data
+  ) {
+    userId = res.data.id
+  }
+}
 
 ---
 
 <Layout title="shortly - acortador de urls">
   
-  <InputForm client:load />
+  <InputForm userId={userId}  client:idle  />
 
 </Layout>
