@@ -1,13 +1,14 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import "@/styles/globals.css"
+import Layout from "../layouts/Layout.astro";
+import "@/styles/globals.css";
+import InputForm  from "@/components/FormUrl";
+import { getSession } from "auth-astro/server";
+
+const session = await getSession(Astro.request);
+
 ---
 
-<Layout title="Welcome to Astro.">
-	<Header />
-	<main>
+<Layout title="shortly - acortador de urls">
 
-	</main>
-	
+  <InputForm client:load />
 </Layout>
