@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getLinkUrl } from "./utils/db";
+import { getLinkUrl } from "../utils/db";
 
 export const GET: APIRoute = async ({ params }) => {
   const { code } = params

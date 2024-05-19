@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import InputForm  from "@/components/FormUrl";
 import { getSession } from "auth-astro/server";
-import { getUserByEmail } from "./utils/db";
+import { getUserByEmail } from "../utils/db";
 
 const session = await getSession(Astro.request)
 

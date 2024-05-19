@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { db } from "astro:db";
 import { User } from "astro:db";
 import { like } from "astro:db";
-import { getUserByEmail } from "@/pages/utils/db";
+import { getUserByEmail } from "@/utils/db";
 
 const session = await getSession(Astro.request);
 //Verificar si el usuario existe
