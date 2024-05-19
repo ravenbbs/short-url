@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev --remote",
     "start": "astro dev",
-    "build": "astro check && astro build --remote",
+    "build": "astro check --remote && astro build --remote",
     "preview": "astro preview --remote",
     "astro": "astro",
     "preinstall": "npx only-allow pnpm"
