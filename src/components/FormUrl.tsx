@@ -54,8 +54,7 @@ export default function InputForm({userId}: {userId?: number}) {
 
     shortUrlRef.current!.value = Link
     setError(undefined)
-    } catch (e) {
-      const error = e as Error
+    } catch {
       setError("Error al acortar la URL, intenta mas tarde.")
     }
     
@@ -66,7 +65,7 @@ export default function InputForm({userId}: {userId?: number}) {
       window.navigator.clipboard.writeText(shortUrlRef.current!.value)
       toast.success('URL copiada con éxito.')
 
-    } catch (e){
+    } catch {
       toast.error("No se pudo copiar la URL")
     }
   }
