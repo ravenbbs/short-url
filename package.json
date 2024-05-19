@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro check && astro build --remote",
     "preview": "astro preview --remote",
-    "astro": "astro"
+    "astro": "astro",
+    "preinstall": "npx only-allow pnpm"
+
   },
   "dependencies": {
     "@astrojs/check": "^0.6.0",
