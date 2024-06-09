@@ -66,7 +66,7 @@ if (
               role="button"
               class=" rounded-box bg-base-300 flex items-center	py-1 px-2 cursor-pointer"
             >
-              <h2 class="font-bold text-center">{session.user?.name}</h2>
+              <h2 class="font-bold text-center mr-2 max-sm:hidden">{session.user?.name}</h2>
               <div class="btn btn-ghost btn-circle avatar">
                 <div class="w-10 rounded-full">
                   <img src={session.user?.image} />
@@ -79,13 +79,13 @@ if (
               class="menu menu-sm dropdown-content mt-3 z-[1] p- shadow bg-base-300 flex gap-4 rounded-box w-52"
             >
               <li>
-                <a class="btn btn-neutral" href="/dashboard">
+                <a class="btn btn-success" href="/dashboard">
                   Dashboard
                 </a>
               </li>
 
               <li>
-                <button class="btn btn-neutral" onclick="my_modal.showModal()">
+                <button class="btn btn-error" onclick="my_modal.showModal()">
                   Logout
                 </button>
               </li>
@@ -106,6 +106,7 @@ if (
                   </button>
                 </form>
               </div>
+
             </div>
             <form method="dialog" class="modal-backdrop">
               <button>close</button>
@@ -129,7 +130,6 @@ if (
   if (login) {
     login.onclick = () => signIn("google");
   }
-
   const logout = document.querySelector("#logout") as HTMLButtonElement;
   if (logout) {
     logout.onclick = () => signOut();

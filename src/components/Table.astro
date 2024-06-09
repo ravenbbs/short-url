@@ -1,73 +1,112 @@
 ---
-import { getSession } from "auth-astro/server";
-
-import { getUrlsFromUser, getUserByEmail } from "@/utils/db";
-
-const session = await getSession(Astro.request)
-
-let urls: {
+interface Url {
   url: string;
   code: string;
-}[] = []
-
-if (session && session.user?.email) {
-  const user = await getUserByEmail(session.user.email)
-
-  if (user.success && user.data) {
-    const urlsRes = await getUrlsFromUser(user.data?.id)
-
-    if (urlsRes.success && urlsRes.data) {
-      urls = urlsRes.data.map(url => url)
-    }
-  }
 }
+
+interface Props {
+  urls: Url[];
+}
+
+const { urls } = Astro.props;
 ---
-  <div class="overflow-x-auto w-full">
-    <table class="table table-zebra max-w-5xl mx-auto">
-      <!-- head -->
-      <thead>
-        <tr  class="font-bold text-lg">
-          <th>Url Original</th>
-          <th>Url Acortara</th>
-          <th>Copiar/Eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        {urls.map(url => (
-          <tr>
+
+<div class="overflow-x-auto w-full">
+  <table class="table table-zebra max-w-5xl mx-auto">
+    <thead>
+      <tr class="font-bold text-lg">
+        <th>Url Original</th>
+        <th>Url Acortada</th>
+        <th>Copiar/Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        urls.map((url) => (
+          <tr id={url.code}>
             <th>{url.url}</th>
             <th>shortlly.vercel.app/{url.code}</th>
             <th class="flex items-center gap-2">
-              <button name="buttonCopy" class="btn btn-success" value={url.code}>Copiar</button>
-              <button name="buttonEliminar" class="btn btn-error" value={url.code}>Eliminar</button>
+              <button
+                name="buttonCopy"
+                class="btn btn-success"
+                value={url.code}
+              >
+                Copiar
+              </button>
+              <button
+                name="buttonDelete"
+                class="btn btn-error"
+                value={url.code}
+              >
+                Eliminar
+              </button>
             </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
 
-<script>
+  <script>
+
 import toast from 'react-hot-toast';
 
-const url = window.location.origin
-const copyShortenedUrl = document.getElementsByName('buttonCopy')
+  const url = window.location.origin;
+  const copyShortenedUrl = document.getElementsByName('buttonCopy');
+
+  if (copyShortenedUrl) {
+    for (const button of copyShortenedUrl) {
+      button.onclick = (e) => {
+        // @ts-ignore
+        if (!e.target?.value) return;
+
+        try {
+          // @ts-ignore
+          window.navigator.clipboard.writeText(`${url}/${e.target.value}`);
+          toast.success('URL copiada al portapapeles!');
+        } catch {
+          toast.error('No se pudo copiar la URL al portapapeles');
+        }
+      };
+    }
+  }
 
 
-if (copyShortenedUrl) {
-  for (const button of copyShortenedUrl) {
-    button.onclick = (e) => {
-      // @ts-ignore
-      if (!e.target?.value) return
+
+const deleteButtons = document.getElementsByName('buttonDelete');
+
+if (deleteButtons) {
+  for (const button of deleteButtons) {
+    button.onclick = async (e) => {
+              // @ts-ignore
+
+      if (!e.target?.value) return;
 
       try {
-        // @ts-ignore
-        window.navigator.clipboard.writeText(`${url}/${e.target.value}`)
-        toast.success('URL copiada al portapapeles!')
+        const response = await fetch('/api/delete-url', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },        
+          // @ts-ignore
+          body: JSON.stringify({ id: e.target.value }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          toast.success('URL eliminada exitosamente');
+          //window.location.reload();
+        } else {
+          toast.error('Error al eliminar la URL');
+        }
       } catch {
-        toast.error('No se pudo copiar la URL al portapapeles')
+        toast.error('No se pudo eliminar la URL');
       }
     }
   }
+
 }
-</script>
+  </script>

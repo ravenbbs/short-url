@@ -2,11 +2,28 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import InputForm  from "@/components/FormUrl";
-import Table from "@/components/Table.astro";
 import { getSession } from "auth-astro/server";
-import { getUserByEmail } from "../utils/db";
+import { getUrlsFromUser, getUserByEmail } from "../utils/db";
+import Table from "@/components/Table.astro";
 
 const session = await getSession(Astro.request)
+
+let urls: {
+  url: string;
+  code: string;
+}[] = []
+
+if (session && session.user?.email) {
+  const user = await getUserByEmail(session.user.email);
+
+  if (user.success && user.data) {
+    const urlsRes = await getUrlsFromUser(user.data.id);
+
+    if (urlsRes.success && urlsRes.data) {
+      urls = urlsRes.data.slice(0, 5).map(url => url);
+    }
+  }
+}
 
 let userId: number | undefined
 if (
@@ -22,13 +39,13 @@ if (
     userId = res.data.id
   }
 }
-
 ---
 
 <Layout title="shortly - acortador de urls">
   
   <InputForm userId={userId}  client:idle  />
 
-  <Table />
+  <Table urls={urls} client:load />
+ 
 
 </Layout>

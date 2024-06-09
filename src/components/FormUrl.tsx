@@ -1,10 +1,6 @@
 import {useRef, useState}  from "react";
-
 import { CircleX } from "lucide-react";
-
 import toast from 'react-hot-toast';
-
-
 
 function validarURL(url: string): boolean {
   // Expresión regular para validar una URL
@@ -54,6 +50,8 @@ export default function InputForm({userId}: {userId?: number}) {
     shortUrlRef.current!.value = Link
     if(Link){
       toast.success('URL acortada con éxito.')
+      //window.location.reload();
+
     }
 
     setError(undefined)
@@ -61,22 +59,23 @@ export default function InputForm({userId}: {userId?: number}) {
       toast.error("Error al acortar la URL, intenta mas tarde.")
       setError("Error al acortar la URL, intenta mas tarde.")
     }
-    
   }
 
   const handleCopy = () => {
     try {
+      if (shortUrlRef.current!.value) {
       window.navigator.clipboard.writeText(shortUrlRef.current!.value)
       toast.success('URL copiada con éxito.')
-
+      } return
+      
     } catch {
       toast.error("No se pudo copiar la URL")
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full mb-6 text-center items-center">
-        <h1 className="text-5xl mb-4 mt-0 font-bold">Acorta tus URL's!!</h1>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full mb-12 text-center items-center px-3">
+        <h1 className="text-5xl my-8 mt-0 font-bold">Acorta tus URL's!!</h1>
 
       {error && (
         <div className="flex items-center gap-2">
@@ -90,14 +89,14 @@ export default function InputForm({userId}: {userId?: number}) {
           <span className="label-text font-bold">URL:</span>
         </div>
         <input
-          className="input input-bordered w-full max-w-lg input-primary"
+          className="input mb-2 input-bordered w-full max-w-lg input-primary"
           placeholder="Escribe aquí tu URL"
           type="url"
           defaultValue={url}
           onChange={(e) => setUrl(e.target.value)}
         />
       </label>
-      <button type="submit" className="btn w-full max-w-lg btn-active btn-ghost">
+      <button type="submit" className="btn w-full max-w-lg btn-active btn-primary">
         Acortar URL
       </button>
 
@@ -108,7 +107,7 @@ export default function InputForm({userId}: {userId?: number}) {
         <input
         disabled
         ref={shortUrlRef}
-        className="input input-bordered w-full max-w-lg"
+        className="input mb-2 w-full max-w-lg"
         type="text"
       />
       </label>
@@ -116,7 +115,7 @@ export default function InputForm({userId}: {userId?: number}) {
       <button type="button" onClick={handleCopy} className="btn w-full max-w-lg btn-active btn-success" >
         Copiar URL
       </button>
-
+      
     </form>
   );
 }

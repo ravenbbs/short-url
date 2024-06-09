@@ -1,8 +1,9 @@
 ---
+"use client;"
 import { getSession } from "auth-astro/server";
 import Layout from "../layouts/Layout.astro";
-import { ArrowLeft } from "lucide-react";
 import { getUrlsFromUser, getUserByEmail } from "@/utils/db";
+import Table from "@/components/Table.astro";
 
 const session = await getSession(Astro.request)
 
@@ -27,62 +28,9 @@ if (session && session.user?.email) {
   }
 }
 ---
-
 <Layout title="Mis URLs acortadas">
-  <a href="/">
-    <ArrowLeft />
-    Ir al inicio
-  </a>
-  <h1>{h1}</h1>
-  
-  <div class="overflow-x-auto w-full">
-    <table class="table table-zebra max-w-5xl mx-auto">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th>Url Original</th>
-          <th>Url Acortara</th>
-          <th>Copiar/Eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        {urls.map(url => (
-          <tr>
-            <th>{url.url}</th>
-            <th>shortlly.vercel.app/{url.code}</th>
-            <th class="flex items-center gap-2">
-              <button name="buttonCopy" class="btn btn-success" value={url.code}>Copiar</button>
-              <button name="buttonEliminar" class="btn btn-error" value={url.code}>Eliminar</button>
-            </th>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+  <h1 class="text-5xl my-8 mt-0 font-bold text-center">{h1}</h1>
+
+  <Table urls={urls} client:load />
+
 </Layout>
-
-
-<script>
-  import toast from 'react-hot-toast';
-
-  const url = window.location.origin
-  const copyShortenedUrl = document.getElementsByName('buttonCopy')
-
-
-  if (copyShortenedUrl) {
-    for (const button of copyShortenedUrl) {
-      button.onclick = (e) => {
-        // @ts-ignore
-        if (!e.target?.value) return
-
-        try {
-          // @ts-ignore
-          window.navigator.clipboard.writeText(`${url}/${e.target.value}`)
-          toast.success('URL copiada al portapapeles!')
-        } catch {
-          toast.error('No se pudo copiar la URL al portapapeles')
-        }
-      }
-    }
-  }
-</script>
