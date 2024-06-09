@@ -1,14 +1,9 @@
 ---
 import { getSession } from "auth-astro/server";
-import Layout from "../layouts/Layout.astro";
-import { ArrowLeft } from "lucide-react";
+
 import { getUrlsFromUser, getUserByEmail } from "@/utils/db";
 
 const session = await getSession(Astro.request)
-
-const h1 = session
-  ? `URLs acortadas de ${session.user?.name?.split(' ')[0]}`
-  : 'Inicia sesión para ver tus URLs'
 
 let urls: {
   url: string;
@@ -27,19 +22,11 @@ if (session && session.user?.email) {
   }
 }
 ---
-
-<Layout title="Mis URLs acortadas">
-  <a href="/">
-    <ArrowLeft />
-    Ir al inicio
-  </a>
-  <h1>{h1}</h1>
-  
   <div class="overflow-x-auto w-full">
     <table class="table table-zebra max-w-5xl mx-auto">
       <!-- head -->
       <thead>
-        <tr>
+        <tr  class="font-bold text-lg">
           <th>Url Original</th>
           <th>Url Acortara</th>
           <th>Copiar/Eliminar</th>
@@ -59,30 +46,28 @@ if (session && session.user?.email) {
       </tbody>
     </table>
   </div>
-</Layout>
-
 
 <script>
-  import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
-  const url = window.location.origin
-  const copyShortenedUrl = document.getElementsByName('buttonCopy')
+const url = window.location.origin
+const copyShortenedUrl = document.getElementsByName('buttonCopy')
 
 
-  if (copyShortenedUrl) {
-    for (const button of copyShortenedUrl) {
-      button.onclick = (e) => {
+if (copyShortenedUrl) {
+  for (const button of copyShortenedUrl) {
+    button.onclick = (e) => {
+      // @ts-ignore
+      if (!e.target?.value) return
+
+      try {
         // @ts-ignore
-        if (!e.target?.value) return
-
-        try {
-          // @ts-ignore
-          window.navigator.clipboard.writeText(`${url}/${e.target.value}`)
-          toast.success('URL copiada al portapapeles!')
-        } catch {
-          toast.error('No se pudo copiar la URL al portapapeles')
-        }
+        window.navigator.clipboard.writeText(`${url}/${e.target.value}`)
+        toast.success('URL copiada al portapapeles!')
+      } catch {
+        toast.error('No se pudo copiar la URL al portapapeles')
       }
     }
   }
+}
 </script>

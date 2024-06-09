@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import InputForm  from "@/components/FormUrl";
+import Table from "@/components/Table.astro";
 import { getSession } from "auth-astro/server";
 import { getUserByEmail } from "../utils/db";
 
@@ -27,5 +28,7 @@ if (
 <Layout title="shortly - acortador de urls">
   
   <InputForm userId={userId}  client:idle  />
+
+  <Table />
 
 </Layout>
