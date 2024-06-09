@@ -1,6 +1,5 @@
 import {useRef, useState}  from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+
 import { CircleX } from "lucide-react";
 
 import toast from 'react-hot-toast';
@@ -53,8 +52,13 @@ export default function InputForm({userId}: {userId?: number}) {
     }
 
     shortUrlRef.current!.value = Link
+    if(Link){
+      toast.success('URL acortada con éxito.')
+    }
+
     setError(undefined)
     } catch {
+      toast.error("Error al acortar la URL, intenta mas tarde.")
       setError("Error al acortar la URL, intenta mas tarde.")
     }
     
@@ -71,42 +75,48 @@ export default function InputForm({userId}: {userId?: number}) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      {
-        error && (
-          <div className="flex gap-2">
-            <h2 className="font-bold text-red-500">
-              {error}
-            </h2>
-            <CircleX className="text-red-500" />
-          </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full mb-6 text-center items-center">
+        <h1 className="text-5xl mb-4 mt-0 font-bold">Acorta tus URL's!!</h1>
 
-        )
-      }
-      <Input 
-        className="outline-none border-none "
-        placeholder="Escribe aquí tu URL" 
-        type="url" 
-        defaultValue={url}
-        onChange={(e) => setUrl(e.target.value)}
+      {error && (
+        <div className="flex items-center gap-2">
+          <h2 className="font-bold text-red-500">{error}</h2>
+          <CircleX className="text-red-500" />
+        </div>
+      )}
+
+      <label className="form-control w-full max-w-lg">
+        <div className="label">
+          <span className="label-text font-bold">URL:</span>
+        </div>
+        <input
+          className="input input-bordered w-full max-w-lg input-primary"
+          placeholder="Escribe aquí tu URL"
+          type="url"
+          defaultValue={url}
+          onChange={(e) => setUrl(e.target.value)}
         />
-      <Button
-        type="submit"
-        className="w-full ">
+      </label>
+      <button type="submit" className="btn w-full max-w-lg btn-active btn-ghost">
         Acortar URL
-      </Button>
-      <Input 
+      </button>
+
+      <label className="form-control w-full max-w-lg mt-2">
+        <div className="label">
+          <span className="label-text font-bold">URL Acortada:</span>
+        </div>
+        <input
         disabled
         ref={shortUrlRef}
-        className="outline-none border-none bg-gray-300 "
-        type="text" />      
-      <Button
-        type="button"
-        onClick={handleCopy}
-        className="w-full ">
+        className="input input-bordered w-full max-w-lg"
+        type="text"
+      />
+      </label>
+
+      <button type="button" onClick={handleCopy} className="btn w-full max-w-lg btn-active btn-success" >
         Copiar URL
-      </Button>
+      </button>
+
     </form>
-    
-  )
+  );
 }
