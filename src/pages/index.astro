@@ -45,6 +45,15 @@ if (
   
   <InputForm userId={userId}  client:idle  />
 
+  <div class="divider mb-0"></div> 
+
+  <div class="text-center my-2">
+    <h2 class="text-4xl font-bold mb-2">Tus URL's más recientes</h2>
+    <p class="text-lg text-gray-500">
+      Míralas completas en el <a href="/dashboard" class="text-blue-500 underline">dashboard</a>
+    </p>
+  </div>
+
   <Table urls={urls} client:load />
  
 

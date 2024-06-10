@@ -74,7 +74,7 @@ export default function InputForm({userId}: {userId?: number}) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full mb-12 text-center items-center px-3">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-full mb-6 text-center items-center px-3">
         <h1 className="text-5xl my-8 mt-0 font-bold">Acorta tus URL's!!</h1>
 
       {error && (
@@ -115,7 +115,7 @@ export default function InputForm({userId}: {userId?: number}) {
       <button type="button" onClick={handleCopy} className="btn w-full max-w-lg btn-active btn-success" >
         Copiar URL
       </button>
-      
+
     </form>
   );
 }
