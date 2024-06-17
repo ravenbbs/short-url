@@ -1,10 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import "@/styles/globals.css";
 import InputForm  from "@/components/FormUrl";
 import { getSession } from "auth-astro/server";
 import { getUrlsFromUser, getUserByEmail } from "../utils/db";
-import Table from "@/components/Table.astro";
 
 const session = await getSession(Astro.request)
 
@@ -20,7 +18,7 @@ if (session && session.user?.email) {
     const urlsRes = await getUrlsFromUser(user.data.id);
 
     if (urlsRes.success && urlsRes.data) {
-      urls = urlsRes.data.slice(0, 5).map(url => url);
+      urls = urlsRes.data.slice(-5).reverse().map(url => url);
     }
   }
 }
@@ -44,17 +42,5 @@ if (
 <Layout title="shortly - acortador de urls">
   
   <InputForm userId={userId}  client:idle  />
-
-  <div class="divider mb-0"></div> 
-
-  <div class="text-center my-2">
-    <h2 class="text-4xl font-bold mb-2">Tus URL's más recientes</h2>
-    <p class="text-lg text-gray-500">
-      Míralas completas en el <a href="/dashboard" class="text-blue-500 underline">dashboard</a>
-    </p>
-  </div>
-
-  <Table urls={urls} />
- 
 
 </Layout>
