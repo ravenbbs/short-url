@@ -2,7 +2,6 @@
 import { getSession } from "auth-astro/server";
 import Layout from "../layouts/Layout.astro";
 import { getUrlsFromUser, getUserByEmail } from "@/utils/db";
-import Table from "@/components/Table.astro";
 
 const session = await getSession(Astro.request)
 
@@ -22,7 +21,8 @@ if (session && session.user?.email) {
     const urlsRes = await getUrlsFromUser(user.data?.id)
 
     if (urlsRes.success && urlsRes.data) {
-      urls = urlsRes.data.map(url => url)
+      urls = urlsRes.data.slice().reverse().map(url => url)
+      console.log(urls)
     }
   }
 }
@@ -30,6 +30,61 @@ if (session && session.user?.email) {
 <Layout title="Mis URLs acortadas">
   <h1 class="text-5xl my-8 mt-0 font-bold text-center">{h1}</h1>
 
-  <Table urls={urls} />
-
+  <!-- <Table urls={urls}  /> -->
+  <div class="overflow-x-auto w-full">
+    <table class="table table-zebra max-w-5xl mx-auto">
+      <thead>
+        <tr class="font-bold text-lg">
+          <th>Url Original</th>
+          <th>Url Acortada</th>
+          <th>Copiar/Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          urls.map((url) => (
+            <tr id={url.code}>
+              <th>{url.url}</th>
+              <th>shortlly.vercel.app/{url.code}</th>
+              <th class="flex items-center gap-2">
+                <button
+                  name="buttonCopy"
+                  class="btn btn-success"
+                  value={url.code}
+                >
+                  Copiar
+                </button>
+                <button
+                  name="buttonDelete"
+                  class="btn btn-error"
+                  value={url.code}
+                  onclick={`confirmDeleteModal.showModal()`}
+                >
+                  Eliminar
+                </button>
+              </th>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  
+  <dialog id="confirmDeleteModal" class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Confirmar Eliminación</h3>
+      <p class="py-4">¿Estás seguro de que deseas eliminar esta URL?</p>
+      <div class="modal-action">
+        <button id="cancelDeleteButton" class="btn btn-success">Cancelar</button>
+        <button id="confirmDeleteButton" class="btn btn-error">Eliminar</button>
+      </div>
+    </div>
+  </dialog>
+  
+  <script>
+    import { copyButtons, deleteButtons } from "@/lib/utils"
+  
+    copyButtons()
+    deleteButtons()
+  </script>
 </Layout>
