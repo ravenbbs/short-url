@@ -23,16 +23,16 @@ if (
   }
 }
 ---
-<header class="navbar bg-base-100 pl-4">
+<header class="navbar pl-4">
   <div class="flex-1">
-    <a href="/" class="btn btn-active text-xl"
+    <a href="/" class="btn btn-ghost text-xl"
       >shortly
       <img class="w-12 h-10" src="./logo.svg" />
     </a>
   </div>
 
   <div class="menu menu-md menu-horizontal gap-4">
-    <label class="swap swap-rotate">
+    <label class="swap swap-rotate btn btn-ghost">
       <!-- this hidden checkbox controls the state -->
       <input type="checkbox" class=" theme-controller data-toggle-theme" data-toggle-theme="synthwave,nord" />
 
@@ -101,7 +101,7 @@ if (
               <div class="modal-action">
                 <form method="dialog">
                   <button class="btn btn-secondary">Cancelar</button>
-                  <button class="ml-2 btn btn-active btn-error" id="logout">
+                  <button class="ml-2 btn btn-error" id="logout">
                     Logout
                   </button>
                 </form>
@@ -115,7 +115,7 @@ if (
         </>
       ) : (
         <>
-          <button class="btn btn-active btn-primary" id="login">
+          <button class="btn  btn-primary" id="login">
             Login
           </button>
         </>

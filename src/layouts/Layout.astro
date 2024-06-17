@@ -2,6 +2,8 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { Toaster } from 'react-hot-toast';
+import { SEOMetadata } from 'astro-seo-metadata';
+
 import "@/styles/globals.css";
 
 interface Props {
@@ -17,8 +19,18 @@ const { title } = Astro.props;
     <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <SEOMetadata
+    siteName={'Shortly'}
+    title={title}
+    description={'Le insightful description'}
+    image={'http://example.com/the_image_url-preferably_absolute.jpg'}
+    favicon={'/favicon.svg'}
+    author="Julio Condor"
+    astroSitemap={true}
+    canonicalUrl={Astro.url.toString()}
+    type={'website'}
+    astroGenerator={true}
+  />
     <script is:inline>
       // ☝️ This script prevents the FART effect by setting the theme before rendering.
       (function() {
@@ -29,7 +41,13 @@ const { title } = Astro.props;
       })();
     </script>
   </head>
-  <body class="h-screen">
+
+  <body class="relative h-full w-full">
+
+    <div class="absolute z-[-2] bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_top,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_30%,transparent_100%)]"></div>
+
+    <div class="absolute z-[-2] bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_top,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_100%,#000_30%,transparent_100%)]"></div>
+
     <Header />
     <div class="divider mt-0"></div> 
 
